@@ -6,3 +6,4 @@
     - include_tasks: tasks/feh.yml
     - include_tasks: tasks/conky.yml
     - include_tasks: tasks/arandr.yml
+    - include_tasks: tasts/dotfiles.yml

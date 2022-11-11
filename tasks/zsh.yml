@@ -1,6 +1,7 @@
 - name: Install zsh
   package:
     name: zsh
+  become: true
 
 - name: Set zsh as default
   shell:
