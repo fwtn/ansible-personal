@@ -1,5 +1,7 @@
-- name: Ensure .dotfiles directory is present
-  file:
-    path: ~/.dotfiles
-    state: directory
-    mode: '0700'
+- include_vars:
+    file: ../secrets.yml
+
+- git:
+    repo: "https://{{github_user|urlencode()}}:{{github_personal|urlencode()}}@github.com/fabianlee/local-kvm-cloudimage.git"
+    dest: "~/.dotfiles"
+    update: yes
