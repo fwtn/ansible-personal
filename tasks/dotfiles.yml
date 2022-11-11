@@ -1,0 +1,5 @@
+- name: Ensure .dotfiles directory is present
+  file:
+    path: ~/.dotfiles
+    state: directory
+    mode: '0700'
