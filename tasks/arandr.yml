@@ -1,0 +1,5 @@
+- name: Ensure arandr is present
+  package:
+    name: arandr
+    state: present
+  become: true

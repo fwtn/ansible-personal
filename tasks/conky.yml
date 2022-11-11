@@ -2,3 +2,4 @@
   package:
     name: conky
     state: present
+  become: true

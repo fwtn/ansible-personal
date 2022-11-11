@@ -2,6 +2,7 @@
   package:
     name: neovim
     state: present
+  become: true
   tags:
     - nvim
 

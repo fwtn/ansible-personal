@@ -1,6 +1,6 @@
-- name: Ensure feh is present
+- name: Ensure i3 is present
   package:
-    name: feh
+    name: i3
     state: present
   become: true
 
