@@ -1,3 +1,0 @@
-- name: a tester
-  debug:
-    msg: "okidoki"
