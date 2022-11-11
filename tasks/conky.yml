@@ -1,0 +1,4 @@
+- name: Ensure conky is present
+  package:
+    name: conky
+    state: present

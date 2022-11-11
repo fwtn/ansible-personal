@@ -1,0 +1,4 @@
+- name: Ensure feh is present
+  package:
+    name: feg
+    state: present

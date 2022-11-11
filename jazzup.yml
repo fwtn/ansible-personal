@@ -1,0 +1,5 @@
+- name: Make It Mine
+  hosts: localhost
+  tasks:
+    - include_tasks: tasks/zsh.yml
+    - include_tasks: tasks/nvim.yml

@@ -1,6 +1,0 @@
-- name: Tester
-  hosts: localhost
-  tasks:
-    - name: test
-      debug:
-        msg: "okidoki"
