@@ -2,6 +2,6 @@
     file: ../secrets.yml
 
 - git:
-    repo: "https://{{github_user|urlencode()}}:{{github_personal|urlencode()}}@github.com/fabianlee/local-kvm-cloudimage.git"
+    repo: "https://{{github_user|urlencode()}}:{{github_token|urlencode()}}@github.com/fabianlee/local-kvm-cloudimage.git"
     dest: "~/.dotfiles"
     update: yes
