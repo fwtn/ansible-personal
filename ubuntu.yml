@@ -19,7 +19,7 @@
           - tldr
           - xclip
           - xorg
-          - apt-transport-httpd
+          - apt-transport-https
 
 
     - name: Get dotfiles
