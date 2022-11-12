@@ -50,7 +50,14 @@
 
     - name: Push dotfiles
       shell:
-        cmd: stow -d ~/.dotfiles
+        cmd: stow -d ~/.dotfiles {{ item }}
+      with_items:
+        - i3
+        - bin
+        - zsh
+        - tmux
+        - kitty
+        - nvim
 
 
     - name: Vim PLUG
