@@ -1,9 +1,0 @@
-- name: Make It Mine
-  hosts: localhost
-  tasks:
-    - include_tasks: tasks/zsh.yml
-    - include_tasks: tasks/nvim.yml
-    - include_tasks: tasks/feh.yml
-    - include_tasks: tasks/conky.yml
-    - include_tasks: tasks/arandr.yml
-    - include_tasks: tasks/dotfiles.yml

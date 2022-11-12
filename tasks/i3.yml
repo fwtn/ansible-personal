@@ -1,6 +1,0 @@
-- name: Ensure i3 is present
-  package:
-    name: i3
-    state: present
-  become: true
-

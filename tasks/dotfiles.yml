@@ -1,7 +1,0 @@
-- include_vars:
-    file: ../secrets.yml
-
-- git:
-    repo: "https://{{github_user|urlencode()}}:{{github_token|urlencode()}}@github.com/fwtn/dotfiles.git"
-    dest: "~/.dotfiles"
-    update: yes

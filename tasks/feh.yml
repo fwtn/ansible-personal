@@ -1,6 +1,0 @@
-- name: Ensure feh is present
-  package:
-    name: feh
-    state: present
-  become: true
-
