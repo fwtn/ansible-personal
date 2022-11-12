@@ -3,6 +3,13 @@
   tasks:
     - include_vars: secrets.yml
 
+
+    - name: Make .local a dir
+      file:
+        path: ~/.local
+        state: directory
+
+
     - name: Install packges
       become: true
       package:
@@ -54,13 +61,12 @@
         - zsh
         - tmux
         - kitty
-        - feh
         - nvim
 
 
     - name: Add /bin/snap to path
       shell:
-        cmd: echo "export PATH=$PATH:/snap/bin" >> ~./.zshrc
+        cmd: echo "export PATH=$PATH:/snap/bin" >> ~/.zshrc
 
     - name: Get oh-my-zsh
       shell:
@@ -82,7 +88,7 @@
       shell:
         cmd: tldr -u
 
-    - name: clone ly login repe
+    - name: clone ly login repo
       git:
         repo: https://github.com/fairyglade/ly
         dest: /tmp/ly
@@ -96,11 +102,13 @@
       shell:
         chdir: /tmp/ly
         cmd: make install installsystemd
+      become: true
 
     - name: enable ly login service
       service:
         name: ly
-        state: enabled
+        enabled: true
+      become: true
 
     - name: Import brave apt key
       apt_key:
@@ -113,3 +121,12 @@
       apt_repository:
         repo: "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"
         state: present
+      become: true
+
+    - name: Install brave
+      apt:
+        name: brave-browser
+        state: present
+        update_cache: yes
+      become: true
+
