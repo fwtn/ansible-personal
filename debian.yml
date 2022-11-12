@@ -1,0 +1,115 @@
+- name: Ready... Set... Go!
+  hosts: localhost
+  tasks:
+    - include_vars: secrets.yml
+
+    - name: Install packges
+      become: true
+      package:
+        name:
+          - git
+          - zsh
+          - tmux
+          - neovim
+          - stow
+          - kitty
+          - i3
+          - fzf
+          - tldr
+          - feh
+          - arandr
+          - xclip
+          - snapd
+          - xorg
+          - build-essential 
+          - libpam0g-dev
+          - libxcb-xkb-dev
+          - apt-transport-https
+          - gnupg
+          - software-properties-common
+
+
+    - name: Install snaps
+      shell:
+        cmd: snap install {{ item }}
+      with_items:
+        - core
+        - slack
+      become: true
+
+
+    - name: Get dotfiles
+      git:
+        repo: "https://{{github_user|urlencode()}}:{{github_token|urlencode()}}@github.com/fwtn/dotfiles.git"
+        dest: "~/.dotfiles"
+        update: yes
+
+
+    - name: Push dotfiles
+      shell:
+        cmd: stow -d ~/.dotfiles {{ item }}
+      with_items:
+        - i3
+        - bin
+        - zsh
+        - tmux
+        - kitty
+        - feh
+        - nvim
+
+
+    - name: Add /bin/snap to path
+      shell:
+        cmd: echo "export PATH=$PATH:/snap/bin" >> ~./.zshrc
+
+    - name: Get oh-my-zsh
+      shell:
+        cmd: sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+      register: zout
+      failed_when: zout.rc > 1
+      changed_when: zout.rc == 0
+ 
+    - name: Vim PLUG
+      shell:
+        cmd: sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+    - name: Install vim plugins
+      shell:
+        cmd: vim +PlugInstall +qall
+
+
+    - name: Update tldr cache
+      shell:
+        cmd: tldr -u
+
+    - name: clone ly login repe
+      git:
+        repo: https://github.com/fairyglade/ly
+        dest: /tmp/ly
+
+    - name: Compile ly login
+      shell:
+        chdir: /tmp/ly
+        cmd: make
+
+    - name: install ly login
+      shell:
+        chdir: /tmp/ly
+        cmd: make install installsystemd
+
+    - name: enable ly login service
+      service:
+        name: ly
+        state: enabled
+
+    - name: Import brave apt key
+      apt_key:
+        url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+        keyring: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+        state: present
+      become: true
+
+    - name: Add brave repo
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"
+        state: present
