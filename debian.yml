@@ -27,7 +27,7 @@
         cmd: sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
       register: zout
       failed_when: zout.rc > 1
-      changed_when: sout.rc == 0
+      changed_when: zout.rc == 0
 
     - name: Get dotfiles
       git:
