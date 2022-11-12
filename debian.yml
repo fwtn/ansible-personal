@@ -48,8 +48,7 @@
 
     - name: Push dotfiles
       shell:
-        cmd: stow
-        chdir: ~/.dotfiles
+        cmd: stow -d ~/.dotfiles
 
 
     - name: Vim PLUG
