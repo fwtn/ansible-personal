@@ -20,6 +20,7 @@
           - fzf
           - tldr
           - xclip
+
    
 
     - name: Get oh-my-zsh
