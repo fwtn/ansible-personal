@@ -88,27 +88,33 @@
       shell:
         cmd: tldr -u
 
-    - name: clone ly login repo
-      git:
-        repo: https://github.com/fairyglade/ly
-        dest: /tmp/ly
-
-    - name: Compile ly login
-      shell:
-        chdir: /tmp/ly
-        cmd: make
-
-    - name: install ly login
-      shell:
-        chdir: /tmp/ly
-        cmd: make install installsystemd
+    - name: install gdm
+      package:
+        name: gdm3
+        state: present
       become: true
 
-    - name: enable ly login service
-      service:
-        name: ly
-        enabled: true
-      become: true
+#   - name: clone ly login repo
+#     git:
+#       repo: https://github.com/fairyglade/ly
+#       dest: /tmp/ly
+
+#   - name: Compile ly login
+#     shell:
+#       chdir: /tmp/ly
+#       cmd: make
+
+#   - name: install ly login
+#     shell:
+#       chdir: /tmp/ly
+#       cmd: make install installsystemd
+#     become: true
+
+#   - name: enable ly login service
+#     service:
+#       name: ly
+#       enabled: true
+#     become: true
 
     - name: Import brave apt key
       apt_key:
