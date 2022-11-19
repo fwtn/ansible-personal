@@ -57,6 +57,9 @@
         - curl -fLo "Hack Italic Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hack/Italic/complete/Hack%20Italic%20Nerd%20Font%20Complete.ttf
         - curl -fLo "Hack Bold Italic Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hack/BoldItalic/complete/Hack%20Bold%20Italic%20Nerd%20Font%20Complete.ttf
 
+    - name: Update fonts cache
+      shell:
+        cmd: fc-cache
 
     - name: Get dotfiles
       git:
@@ -64,6 +67,10 @@
         dest: "~/.dotfiles"
         update: yes
 
+    - name: Remove present dotfiles
+      file:
+        path: ~/.zshrc
+        state: absent
 
     - name: Push dotfiles
       shell:
