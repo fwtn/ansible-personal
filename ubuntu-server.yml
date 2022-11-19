@@ -30,6 +30,31 @@
           - fd-find
           - ripgrep
           - sddm
+          - nodejs
+          - python3-pip
+          - npm
+
+    - name: Install n node version manager
+      become: true
+      shell:
+        cmd: npm install -g n
+
+    - name: Install pyright
+      become: true
+      shell:
+        cmd: npm install -g pyright
+
+    - name: Install python modules
+      pip:
+        name: 
+          - pynvim
+          - flake8
+          - black
+
+    - name: Install node neovim package
+      become: true
+      shell:
+        cmd: npm install -g neovim
 
     - name: Make sure local fonts directory exists
       file:
@@ -124,7 +149,15 @@
         update_cache: yes
       become: true
 
- 
-    
-    
-    
+    - name: Ensure wallpaper directory exists
+      file:
+        path: ~/.wallpapers/
+        state: directory
+
+    - name: Copy wallpapers
+      copy:
+        src: "{{ item }}"
+        dest: ~/.wallpapers/
+      with_items:
+        - files/wallpapers/1.png
+        - files/wallpapers/2.png
