@@ -19,6 +19,7 @@
           - slack
           - i3
           - stow
+          - pandoc
           - arandr
           - zsh
           - neovim
