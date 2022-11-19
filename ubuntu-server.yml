@@ -35,18 +35,7 @@
       file:
         path: ~/.local/share/fonts
         state: directory
-
-    - name: Rustup
-      shell:
-        cmd: "curl https://sh.rustup.rs -sSf | sh -s -- -y"
-
-    - name: Install lsd, bat
-      shell:
-        cmd: "~/.cargo/bin/cargo install {{ item }}"
-      with_items:
-        - lsd
-        - bat
-
+    
     - name: Get some Nerd Fonts
       shell:
         chdir: ~/.local/share/fonts
@@ -59,7 +48,19 @@
 
     - name: Update fonts cache
       shell:
-        cmd: fc-cache
+        cmd: fc-cache -f
+
+
+    - name: Rustup
+      shell:
+        cmd: "curl https://sh.rustup.rs -sSf | sh -s -- -y"
+
+    - name: Install lsd, bat
+      shell:
+        cmd: "~/.cargo/bin/cargo install {{ item }}"
+      with_items:
+        - lsd
+        - bat
 
     - name: Get dotfiles
       git:
@@ -67,17 +68,17 @@
         dest: "~/.dotfiles"
         update: yes
 
-    - name: Remove present dotfiles
-      file:
-        path: ~/.zshrc
-        state: absent
-
     - name: Get oh-my-zsh
       shell:
         cmd: sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
       register: zout
       failed_when: zout.rc > 1
       changed_when: zout.rc == 0
+
+    - name: Remove present dotfiles
+      file:
+        path: ~/.zshrc
+        state: absent
 
     - name: Push dotfiles
       shell:
