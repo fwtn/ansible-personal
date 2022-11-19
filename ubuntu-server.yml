@@ -3,10 +3,17 @@
   tasks:
     - include_vars: secrets.yml
 
+    - name: Add neovim repository
+      become: true
+      apt_repository:
+        repo: 'ppa:neovim-ppa/unstable'
+
     - name: Install packages
       become: true
-      package:
+      apt:
+        update_cache: true
         name:
+          - gcc
           - feh
           - kitty
           - slack
@@ -35,7 +42,7 @@
 
     - name: Install lsd, bat
       shell:
-        cmd: "cargo install {{ item }}"
+        cmd: "~/.cargo/bin/cargo install {{ item }}"
       with_items:
         - lsd
         - bat
@@ -88,12 +95,6 @@
     - name: Update tldr cache
       shell:
         cmd: tldr -u
-
-    - name: install gdm
-      package:
-        name: gdm3
-        state: present
-      become: true
 
     - name: Import brave apt key
       apt_key:
