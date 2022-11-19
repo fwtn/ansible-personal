@@ -20,11 +20,25 @@
           - xclip
           - xorg
           - apt-transport-https
+          - fd-find
+          - ripgrep
+          - sddm
 
     - name: Make sure local fonts directory exists
       file:
         path: ~/.local/share/fonts
         state: directory
+
+    - name: Rustup
+      shell:
+        cmd: "curl https://sh.rustup.rs -sSf | sh -s -- -y"
+
+    - name: Install lsd, bat
+      shell:
+        cmd: "cargo install {{ item }}"
+      with_items:
+        - lsd
+        - bat
 
     - name: Get some Nerd Fonts
       shell:
