@@ -13,11 +13,20 @@
       apt:
         update_cache: true
         name:
+          - ffmpeg
+          - newsboat
+          - ranger
+          - mpd
+          - mpc
+          - ncmpcpp
+          - neomutt
+          - calcurse
           - gcc
           - feh
           - kitty
           - slack
           - i3
+          - i3lock
           - stow
           - pandoc
           - arandr
@@ -34,6 +43,17 @@
           - nodejs
           - python3-pip
           - npm
+
+    - name: Create ranger plugin folder
+      file:
+        path: ~/.config/ranger/plugins
+        state: directory
+
+    - name: Get ranger icon plugin
+      git:
+        repo: https://github.com/alexanderjeurissen/ranger_devicons
+        dest: ~/.config/ranger/plugins/ranger_devicons
+        update: true
 
     - name: Install n node version manager
       become: true
@@ -105,6 +125,11 @@
       failed_when: zout.rc > 1
       changed_when: zout.rc == 0
 
+    - name: Ensure .mpd directory is present
+      file:
+        path: ~/.mpd/
+        state: directory
+
     - name: Remove present dotfiles
       file:
         path: ~/.zshrc
@@ -120,6 +145,8 @@
         - tmux
         - kitty
         - nvim
+        - mpd
+        - ncmpcpp
 
     - name: Vim PLUG
       shell:
