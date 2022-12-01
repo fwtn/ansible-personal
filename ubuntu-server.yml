@@ -14,10 +14,14 @@
         update_cache: true
         name:
           - ffmpeg
+          - entr
+          - dunst
           - newsboat
           - ranger
           - mpd
+          - htop
           - mpc
+          - scrot
           - ncmpcpp
           - neomutt
           - calcurse
@@ -41,8 +45,11 @@
           - ripgrep
           - sddm
           - nodejs
+          - golang-go
           - python3-pip
+          - ldbd
           - npm
+          - duf
 
     - name: Create ranger plugin folder
       file:
@@ -111,6 +118,7 @@
       with_items:
         - lsd
         - bat
+        - du-dust
 
     - name: Get dotfiles
       git:
