@@ -67,6 +67,11 @@
       shell:
         cmd: npm install -g n
 
+    - name: Install node neovim package
+      become: true
+      shell:
+        cmd: npm install -g neovim
+
     - name: Install pyright
       become: true
       shell:
@@ -78,11 +83,6 @@
           - pynvim
           - flake8
           - black
-
-    - name: Install node neovim package
-      become: true
-      shell:
-        cmd: npm install -g neovim
 
     - name: Make sure local fonts directory exists
       file:
@@ -118,7 +118,9 @@
       with_items:
         - lsd
         - bat
+        - duf
         - du-dust
+        - "starship --locked"
 
     - name: Get dotfiles
       git:
