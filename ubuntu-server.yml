@@ -18,32 +18,19 @@
           - dunst
           - newsboat
           - ranger
-          - mpd
           - htop
-          - mpc
-          - scrot
-          - ncmpcpp
           - neomutt
           - calcurse
           - gcc
-          - feh
-          - kitty
-          - slack
-          - i3
-          - i3lock
           - stow
           - pandoc
-          - arandr
           - zsh
           - neovim
           - fzf
           - tldr
-          - xclip
-          - xorg
           - apt-transport-https
           - fd-find
           - ripgrep
-          - sddm
           - nodejs
           - golang-go
           - python3-pip
@@ -135,11 +122,6 @@
       failed_when: zout.rc > 1
       changed_when: zout.rc == 0
 
-    - name: Ensure .mpd directory is present
-      file:
-        path: ~/.mpd/
-        state: directory
-
     - name: Remove present dotfiles
       file:
         path: ~/.zshrc
@@ -149,7 +131,6 @@
       shell:
         cmd: stow -d ~/.dotfiles {{ item }}
       with_items:
-        - i3
         - bin
         - zsh
         - tmux
@@ -157,15 +138,6 @@
         - nvim
         - mpd
         - ncmpcpp
-
-    - name: Vim PLUG
-      shell:
-        cmd: sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-
-    - name: Install vim plugins
-      shell:
-        cmd: vim +PlugInstall +qall
-
 
     - name: Update tldr cache
       shell:
@@ -178,28 +150,3 @@
         state: present
       become: true
 
-    - name: Add brave repo
-      apt_repository:
-        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/brave-browser-stable-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"
-        state: present
-      become: true
-
-    - name: Install brave
-      apt:
-        name: brave-browser
-        state: present
-        update_cache: yes
-      become: true
-
-    - name: Ensure wallpaper directory exists
-      file:
-        path: ~/.wallpapers/
-        state: directory
-
-    - name: Copy wallpapers
-      copy:
-        src: "{{ item }}"
-        dest: ~/.wallpapers/
-      with_items:
-        - files/wallpapers/1.png
-        - files/wallpapers/2.png

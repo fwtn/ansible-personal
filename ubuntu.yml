@@ -3,15 +3,36 @@
   tasks:
     - include_vars: secrets.yml
 
+    - name: Add neovim repository
+      become: true
+      apt_repository:
+        repo: 'ppa:neovim-ppa/unstable'
+
     - name: Install packages
       become: true
-      package:
+      apt:
+        update_cache: true
         name:
+          - ffmpeg
+          - entr
+          - dunst
+          - newsboat
+          - ranger
+          - mpd
+          - htop
+          - mpc
+          - scrot
+          - ncmpcpp
+          - neomutt
+          - calcurse
+          - gcc
           - feh
           - kitty
           - slack
           - i3
+          - i3lock
           - stow
+          - pandoc
           - arandr
           - zsh
           - neovim
@@ -20,22 +41,86 @@
           - xclip
           - xorg
           - apt-transport-https
+          - fd-find
+          - ripgrep
+          - sddm
+          - nodejs
+          - golang-go
+          - python3-pip
+          - ldbd
+          - npm
+          - duf
+
+    - name: Create ranger plugin folder
+      file:
+        path: ~/.config/ranger/plugins
+        state: directory
+
+    - name: Get ranger icon plugin
+      git:
+        repo: https://github.com/alexanderjeurissen/ranger_devicons
+        dest: ~/.config/ranger/plugins/ranger_devicons
+        update: true
+
+    - name: Install n node version manager
+      become: true
+      shell:
+        cmd: npm install -g n
+
+    - name: Install node neovim package
+      become: true
+      shell:
+        cmd: npm install -g neovim
+
+    - name: Install pyright
+      become: true
+      shell:
+        cmd: npm install -g pyright
+
+    - name: Install python modules
+      pip:
+        name: 
+          - pynvim
+          - flake8
+          - black
 
     - name: Make sure local fonts directory exists
       file:
         path: ~/.local/share/fonts
         state: directory
-
+    
     - name: Get some Nerd Fonts
       shell:
         chdir: ~/.local/share/fonts
         cmd: "{{ item }}"
       with_items:
-        - curl -fLo "Hack Regular Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hack/Regular/complete/Hack%20Regular%20Nerd%20Font%20Complete.ttf
-        - curl -fLo "Hack Bold Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hack/Bold/complete/Hack%20Bold%20Nerd%20Font%20Complete.ttf
-        - curl -fLo "Hack Italic Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hack/Italic/complete/Hack%20Italic%20Nerd%20Font%20Complete.ttf
-        - curl -fLo "Hack Bold Italic Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hack/BoldItalic/complete/Hack%20Bold%20Italic%20Nerd%20Font%20Complete.ttf
+        - curl -fLo "Hack Regular Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/Hack/Regular/complete/Hack%20Regular%20Nerd%20Font%20Complete.ttf
+        - curl -fLo "Hack Bold Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/Hack/Bold/complete/Hack%20Bold%20Nerd%20Font%20Complete.ttf
+        - curl -fLo "Hack Italic Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/Hack/Italic/complete/Hack%20Italic%20Nerd%20Font%20Complete.ttf
+        - curl -fLo "Hack Bold Italic Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/Hack/BoldItalic/complete/Hack%20Bold%20Italic%20Nerd%20Font%20Complete.ttf
+        - curl -fLo "DejaVuSansMono Regular Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf
+        - curl -fLo "DejaVuSansMono Bold Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/DejaVuSansMono/Bold/complete/DejaVu%20Sans%20Mono%20Bold%20Nerd%20Font%20Complete.ttf
+        - curl -fLo "DejaVuSansMono Italic Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/DejaVuSansMono/Italic/complete/DejaVu%20Sans%20Mono%20Oblique%20Nerd%20Font%20Complete.ttf
+        - curl -fLo "DejaVuSansMono Bold Italic Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/DejaVuSansMono/Bold-Italic/complete/DejaVu%20Sans%20Mono%20Bold%20Oblique%20Nerd%20Font%20Complete.ttf
+    
+    - name: Update fonts cache
+      shell:
+        cmd: fc-cache -f
 
+
+    - name: Rustup
+      shell:
+        cmd: "curl https://sh.rustup.rs -sSf | sh -s -- -y"
+
+    - name: Install lsd, bat
+      shell:
+        cmd: "~/.cargo/bin/cargo install {{ item }}"
+      with_items:
+        - lsd
+        - bat
+        - duf
+        - du-dust
+        - "starship --locked"
 
     - name: Get dotfiles
       git:
@@ -43,6 +128,22 @@
         dest: "~/.dotfiles"
         update: yes
 
+    - name: Get oh-my-zsh
+      shell:
+        cmd: sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+      register: zout
+      failed_when: zout.rc > 1
+      changed_when: zout.rc == 0
+
+    - name: Ensure .mpd directory is present
+      file:
+        path: ~/.mpd/
+        state: directory
+
+    - name: Remove present dotfiles
+      file:
+        path: ~/.zshrc
+        state: absent
 
     - name: Push dotfiles
       shell:
@@ -54,13 +155,8 @@
         - tmux
         - kitty
         - nvim
-
-    - name: Get oh-my-zsh
-      shell:
-        cmd: sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-      register: zout
-      failed_when: zout.rc > 1
-      changed_when: zout.rc == 0
+        - mpd
+        - ncmpcpp
 
     - name: Vim PLUG
       shell:
@@ -74,12 +170,6 @@
     - name: Update tldr cache
       shell:
         cmd: tldr -u
-
-    - name: install gdm
-      package:
-        name: gdm3
-        state: present
-      become: true
 
     - name: Import brave apt key
       apt_key:
@@ -101,7 +191,15 @@
         update_cache: yes
       become: true
 
- 
-    
-    
-    
+    - name: Ensure wallpaper directory exists
+      file:
+        path: ~/.wallpapers/
+        state: directory
+
+    - name: Copy wallpapers
+      copy:
+        src: "{{ item }}"
+        dest: ~/.wallpapers/
+      with_items:
+        - files/wallpapers/1.png
+        - files/wallpapers/2.png
