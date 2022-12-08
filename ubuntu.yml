@@ -43,12 +43,14 @@
           - apt-transport-https
           - fd-find
           - ripgrep
-          - sddm
+          # - sddm
+          - gdm3
           - nodejs
           - golang-go
           - python3-pip
           - npm
           - duf
+          - zsh-syntax-highlighting
 
     - name: Create ranger plugin folder
       file:
@@ -119,6 +121,7 @@
         - bat
         - duf
         - du-dust
+        - broot
 
     - name: Get dotfiles
       git:
