@@ -15,6 +15,7 @@
         name:
           - ffmpeg
           - entr
+          - grc
           - dunst
           - newsboat
           - ranger
@@ -34,7 +35,6 @@
           - nodejs
           - golang-go
           - python3-pip
-          - ldbd
           - npm
           - duf
 
