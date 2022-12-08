@@ -47,7 +47,6 @@
           - nodejs
           - golang-go
           - python3-pip
-          - ldbd
           - npm
           - duf
 
@@ -120,7 +119,6 @@
         - bat
         - duf
         - du-dust
-        - "starship --locked"
 
     - name: Get dotfiles
       git:
@@ -144,6 +142,9 @@
       file:
         path: ~/.zshrc
         state: absent
+      with_items:
+        - ~/.zshrc
+        - ~/.zshenv
 
     - name: Push dotfiles
       shell:
