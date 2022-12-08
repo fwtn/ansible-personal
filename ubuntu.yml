@@ -140,7 +140,7 @@
 
     - name: Remove present dotfiles
       file:
-        path: ~/.zshrc
+        path: "{{ item }}"
         state: absent
       with_items:
         - ~/.zshrc
