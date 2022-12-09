@@ -13,6 +13,7 @@
       apt:
         update_cache: true
         name:
+          - imagemagick
           - ffmpeg
           - entr
           - dunst
@@ -43,14 +44,16 @@
           - apt-transport-https
           - fd-find
           - ripgrep
-          # - sddm
-          - gdm3
+          - sddm
+          - sddm-theme-breeze
+          # - gdm3
           - nodejs
           - golang-go
           - python3-pip
           - npm
           - duf
           - zsh-syntax-highlighting
+          - unzip
 
     - name: Create ranger plugin folder
       file:
@@ -117,11 +120,10 @@
       shell:
         cmd: "~/.cargo/bin/cargo install {{ item }}"
       with_items:
-        - lsd
         - bat
         - duf
         - du-dust
-        - broot
+        - exa
 
     - name: Get dotfiles
       git:
@@ -207,3 +209,25 @@
       with_items:
         - files/wallpapers/1.png
         - files/wallpapers/2.png
+
+###############################################################
+#                         SSDM                                #
+###############################################################
+    - name: ensure sddm config file exists
+      become: true
+      become_user: root
+      file:
+        path: /etc/sddm.conf.d
+        state: directory
+
+    - name: ensure sddm config file exists
+      become: true
+      become_user: root
+      copy:
+        src: default.sddm.conf
+        dest: /etc/sddm.conf.d/
+
+    # copy 2.png to /usr/share/wallpapers/Next/contents/images/
+    # edit background line in /usr/share/sddm/themes/breeze/theme.conf to point to 2.png 
+
+
