@@ -116,7 +116,22 @@
       shell:
         cmd: "curl https://sh.rustup.rs -sSf | sh -s -- -y"
 
-    - name: Install lsd, bat
+    - name: Cargo install
+      shell:
+        cmd: "~/.cargo/bin/cargo install {{ item }}"
+      with_items:
+        - bat
+        - duf
+        - du-dust
+        - exa
+
+    - name: Rustup (root)
+      become: true
+      shell:
+        cmd: "curl https://sh.rustup.rs -sSf | sh -s -- -y"
+
+    - name: Cargo install (root)
+      become: true
       shell:
         cmd: "~/.cargo/bin/cargo install {{ item }}"
       with_items:
@@ -137,6 +152,23 @@
       register: zout
       failed_when: zout.rc > 1
       changed_when: zout.rc == 0
+
+    - name: Get oh-my-zsh (root)
+      become: true
+      shell:
+        cmd: sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+      register: zout
+      failed_when: zout.rc > 1
+      changed_when: zout.rc == 0
+
+    - name: Set zsh default
+      become: true
+      user:
+        name: "{{ item }}"
+        shell: /usr/bin/zsh
+      with_items:
+        - hans
+        - root
 
     - name: Ensure .mpd directory is present
       file:
@@ -209,6 +241,7 @@
       with_items:
         - files/wallpapers/1.png
         - files/wallpapers/2.png
+        - files/wallpapers/lock300.png
 
 ###############################################################
 #                         SSDM                                #
@@ -230,4 +263,4 @@
     # copy 2.png to /usr/share/wallpapers/Next/contents/images/
     # edit background line in /usr/share/sddm/themes/breeze/theme.conf to point to 2.png 
 
-
+    
