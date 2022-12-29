@@ -13,46 +13,47 @@
       apt:
         update_cache: true
         name:
-          - imagemagick
-          - ffmpeg
-          - entr
-          - dunst
-          - newsboat
-          - mpd
-          - htop
-          - mpc
-          - scrot
-          - ncmpcpp
-          - neomutt
+          - apt-transport-https
+          - arandr
           - calcurse
-          - gcc
+          - duf
+          - dunst
+          - entr
+          - fd-find
           - feh
-          - kitty
-          - slack
+          - ffmpeg
+          - fzf
+          - gcc
+          - golang-go
+          - htop
           - i3
           - i3lock
-          - stow
-          - pandoc
-          - arandr
-          - zsh
+          - imagemagick
+          - kitty
+          - mpc
+          - mpd
+          - neomutt
           - neovim
-          - fzf
-          - tldr
-          - xclip
-          - xorg
-          - apt-transport-https
-          - fd-find
+          - newsboat
+          - ncmpcpp
+          - npm
+          - nodejs
+          - pandoc
+          - python3-pip
+          - stow
           - ripgrep
+          - scrot
+          # - slack
           - sddm
           - sddm-theme-breeze
-          # - gdm3
-          - nodejs
-          - golang-go
-          - python3-pip
-          - npm
-          - duf
-          - zsh-syntax-highlighting
+          - tldr
           - unzip
+          - uncutter
+          - xclip
+          - xorg
+          - zathura
+          - zsh
+          - zsh-syntax-highlighting
 
     - name: Install n node version manager
       become: true
@@ -183,6 +184,7 @@
         - nvim
         - mpd
         - ncmpcpp
+        - zathura
 
     - name: Vim PLUG
       shell:
